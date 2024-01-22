@@ -1,30 +1,31 @@
-from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from pydantic import BaseModel
 import base64
+import uvicorn
 
 from populate_database import read_h5_file, DATABASE_URL
 import models
 import crud_operations
 
-# Create a FastAPI instance
-app = FastAPI()
 
-# Create a database engine
+app = FastAPI()
 engine = create_engine(DATABASE_URL)
 
-# Define Pydantic models for request bodies
+
 class SpindleLoadData(BaseModel):
+    """ Define a Pydantic model for request bodies """
     machine_number: str
     process_number: str
     label: str
     filename: str
     data: str
 
-# Initialize the database and create tables
+
 models.Base.metadata.create_all(bind=engine)
+
 
 @app.post("/upload_spindle_load_data/")
 async def upload_spindle_load_data(data: SpindleLoadData):
@@ -67,7 +68,14 @@ def get_spindle_load_data(machine_number: str, process_number: str, label: str):
             label=label
         )
         if data:
+            # Encode binary data to Base64 for JSON response
+            for item in data:
+                if item.data:
+                    item.data = base64.b64encode(item.data).decode('utf-8')
             return data
         else:
             raise HTTPException(status_code=404, detail="Data not found")
 
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8000)

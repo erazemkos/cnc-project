@@ -1,6 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, BLOB, DateTime, func
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
@@ -39,7 +38,7 @@ class SpindleLoadData(Base):
     process_id = Column(Integer, ForeignKey('processes.id'), nullable=False)
     label_id = Column(Integer, ForeignKey('labels.id'), nullable=False)
     filename = Column(String, nullable=False)
-    data = Column(BLOB)  # Assuming the .h5 data will be stored as a binary large object
+    data = Column(BLOB)  # .h5 data will be stored as a binary large object
     timestamp = Column(DateTime, default=func.current_timestamp())
     
     # Relationships to machine, process, and label
@@ -47,11 +46,3 @@ class SpindleLoadData(Base):
     process = relationship('Process', back_populates='spindle_load_data')
     label = relationship('Label', back_populates='spindle_load_data')
 
-# Optional: If you want to use the views in your ORM, you can define them as well
-class GoodData(Base):
-    __tablename__ = 'good_data'
-    __table_args__ = {'autoload': True}
-
-class PoorData(Base):
-    __tablename__ = 'poor_data'
-    __table_args__ = {'autoload': True}

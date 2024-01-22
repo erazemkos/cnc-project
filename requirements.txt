@@ -9,3 +9,5 @@ requests
 pydantic
 matplotlib
 pyarrow
+pytest
+httpx
