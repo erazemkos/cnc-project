@@ -4,7 +4,9 @@ To run:
 
 `
     git clone https://github.com/erazemkos/cnc-project.git
+
     cd cnc-project
+
     git clone https://github.com/boschresearch/CNC_Machining.git ./data
 `
 
