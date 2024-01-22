@@ -28,8 +28,8 @@ async def upload_spindle_load_data(data: SpindleLoadData):
     API endpoint to upload spindle load data.
     """
     # Check if the machine, process, and label already exist in the database
-    machine_id = db_handler.get_or_create_machine(int(data.machine_number))
-    process_id = db_handler.get_or_create_process(int(data.process_number))
+    machine_id = db_handler.get_or_create_machine(data.machine_number)
+    process_id = db_handler.get_or_create_process(data.process_number)
     label_id = db_handler.get_or_create_label(data.label)
 
     # Decode the Base64 encoded data

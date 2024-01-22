@@ -40,7 +40,6 @@ class SpindleLoadData(Base):
     label_id = Column(Integer, ForeignKey('labels.id'), nullable=False)
     filename = Column(String, nullable=False)
     data = Column(BLOB)  # .h5 data will be stored as a binary large object
-    num_samples = Column(Integer, nullable=False)
     timestamp = Column(DateTime, default=func.current_timestamp())
     
     # Relationships to machine, process, and label

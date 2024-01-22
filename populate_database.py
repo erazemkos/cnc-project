@@ -46,12 +46,12 @@ def process_label_data(machine: str, process: str, label: str, extension: str = 
         if filename.endswith(extension):
             file_path = os.path.join(label_path, filename)
             data = read_h5_file(file_path)
-            num_samples = np.array(data.shape)[0]
+
             data_blob = data.tobytes()
-            store_data(machine, process, label, filename, data_blob, int(num_samples))
+            store_data(machine, process, label, filename, data_blob)
 
 
-def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes, num_samples: int):
+def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes):
     """
     Store the given data in the database
     """
@@ -62,8 +62,8 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
     insert_label = text("INSERT OR IGNORE INTO labels (label) VALUES (:label)")
     insert_spindle_load = text("""
         INSERT INTO spindle_load_data 
-        (machine_id, process_id, label_id, filename, data, num_samples) 
-        VALUES (:machine_id, :process_id, :label_id, :filename, :data_blob, :num_samples)
+        (machine_id, process_id, label_id, filename, data) 
+        VALUES (:machine_id, :process_id, :label_id, :filename, :data_blob)
     """)
 
     # Executing each insert and getting the lastrowid
@@ -77,8 +77,7 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
         "process_id": process_id,
         "label_id": label_id,
         "filename": filename,
-        "data_blob": data_blob,
-        "num_samples": num_samples
+        "data_blob": data_blob
     })
     conn.commit()
 

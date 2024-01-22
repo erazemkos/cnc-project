@@ -14,7 +14,7 @@ def visualize_data(byte_data, machine_number, process_number):
 
     for i, label in enumerate(['good', 'bad']):
         data = np.frombuffer(byte_data[i].data, dtype=np.float64)
-        data_array = data.reshape(int(byte_data[i].num_samples), 3)
+        data_array = data.reshape(-1, 3)
         axes[i].plot(data_array[:5000, 0])
         axes[i].plot(data_array[:5000, 1])
         axes[i].plot(data_array[:5000, 2])

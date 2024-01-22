@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS spindle_load_data (
     label_id INTEGER NOT NULL,
     filename TEXT NOT NULL,
     data BLOB,
-    num_samples INT NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (machine_id) REFERENCES machines(id),
     FOREIGN KEY (process_id) REFERENCES processes(id),

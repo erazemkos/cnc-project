@@ -9,10 +9,10 @@ class DatabaseHandler:
     def __init__(self, session: Session):
         self._db = session
 
-    def _get_machine_by_number(self, machine_number: int) -> Optional[Machine]:
+    def _get_machine_by_number(self, machine_number: str) -> Optional[Machine]:
         return self._db.query(Machine).filter(Machine.machine_number == machine_number).first()
 
-    def get_or_create_machine(self, machine_number: int) -> int:
+    def get_or_create_machine(self, machine_number: str) -> int:
         machine = self._get_machine_by_number(machine_number)
         if not machine:
             machine = Machine(machine_number=machine_number)
@@ -21,10 +21,10 @@ class DatabaseHandler:
             self._db.refresh(machine)
         return machine.id
 
-    def _get_process_by_number(self, process_number: int) -> Optional[Process]:
+    def _get_process_by_number(self, process_number: str) -> Optional[Process]:
         return self._db.query(Process).filter(Process.process_number == process_number).first()
 
-    def get_or_create_process(self, process_number: int) -> int:
+    def get_or_create_process(self, process_number: str) -> int:
         process = self._get_process_by_number(process_number)
         if not process:
             process = Process(process_number=process_number)

@@ -2,6 +2,7 @@ import base64
 import os
 
 from fastapi.testclient import TestClient
+import numpy as np
 
 from main import app
 
@@ -16,8 +17,9 @@ def test_upload_spindle_load_data():
     label = "good"
     filename = "test_data.h5"
 
-    sample_data = os.urandom(1024)  # Generates 1024 random bytes
-    encoded_data = base64.b64encode(sample_data).decode('utf-8')
+    random_array = np.random.rand(100, 3).astype(dtype=np.float64)
+    random_bytes = random_array.tobytes()
+    encoded_data = base64.b64encode(random_bytes).decode('utf-8')
 
     # Payload for the test
     payload = {
@@ -45,7 +47,7 @@ def test_upload_spindle_load_data():
 
     # Comparing the binary data of the last added data with the data that we inserted as a test
     returned_data = base64.b64decode(data[-1]['data'])
-    assert returned_data == sample_data
+    assert returned_data == random_bytes
 
 
 if __name__ == "__main__":
