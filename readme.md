@@ -3,7 +3,7 @@ To run:
 1. First clone this repo and cnc data to `./data`:
 
 ```
-   git clone https://github.com/erazemkos/cnc-project.git`
+   git clone https://github.com/erazemkos/cnc-project.git
    cd cnc-project
    git clone https://github.com/boschresearch/CNC_Machining.git ./data
 ```
@@ -17,13 +17,13 @@ To run:
 3. Populate the database:
 
 ```
-   python populate_database.py`
+   python populate_database.py
 ```
 
 4. Export two examples - one good, one bad:
 
 ```
-   python data_export_for_visualization.py`
+   python data_export_for_visualization.py
 ```
 
 OR just visualize it with matplotlib (on a subplot using 4000 samples):

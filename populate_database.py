@@ -2,19 +2,14 @@ import os
 import h5py
 import numpy as np
 from sqlalchemy import create_engine, text
-
-# Define the path to the dataset
-DATASET_PATH = "./data/data"
-
-# Define the database connection string
-DATABASE_URL = "sqlite:///./cnc_machining.db"
+from constants import DATABASE_URL, DATASET_PATH
 
 # Create a database engine
 engine = create_engine(DATABASE_URL)
 conn = engine.connect()
 
 
-def read_h5_file(file_path):
+def read_h5_file(file_path: str):
     """
     Reads an .h5 file and returns the data contained within.
     """
@@ -34,27 +29,27 @@ def process_and_store_data():
                 process_label_data(machine, process, label)
 
 
-def get_directories(path):
+def get_directories(path: str):
     """
     Returns a list of directory names inside the given path
     """
     return [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
 
 
-def process_label_data(machine, process, label):
+def process_label_data(machine: str, process: str, label: str, extension: str = '.h5'):
     """
     Process and store data for a specific machine, process, and label
     """
     label_path = os.path.join(DATASET_PATH, machine, process, label)
     for filename in os.listdir(label_path):
-        if filename.endswith('.h5'):
+        if filename.endswith(extension):
             file_path = os.path.join(label_path, filename)
             data = read_h5_file(file_path)
             data_blob = data.tobytes()
             store_data(machine, process, label, filename, data_blob)
 
 
-def store_data(machine, process, label, filename, data_blob):
+def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes):
     """
     Store the given data in the database
     """

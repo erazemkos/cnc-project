@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import base64
 import uvicorn
 
-from populate_database import read_h5_file, DATABASE_URL
+from constants import DATABASE_URL
 import models
 import crud_operations
 

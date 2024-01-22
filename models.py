@@ -3,32 +3,33 @@ from sqlalchemy.orm import relationship, declarative_base
 
 Base = declarative_base()
 
+# Here are the data models for the database, which make the querying easier
+# For more info about the database, see database_schema.sql
+
+
 class Machine(Base):
     __tablename__ = 'machines'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     machine_number = Column(String, nullable=False)
-    
-    # Relationship to spindle_load_data
     spindle_load_data = relationship('SpindleLoadData', back_populates='machine')
+
 
 class Process(Base):
     __tablename__ = 'processes'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     process_number = Column(String, nullable=False)
-    
-    # Relationship to spindle_load_data
     spindle_load_data = relationship('SpindleLoadData', back_populates='process')
+
 
 class Label(Base):
     __tablename__ = 'labels'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     label = Column(String, nullable=False)
-    
-    # Relationship to spindle_load_data
     spindle_load_data = relationship('SpindleLoadData', back_populates='label')
+
 
 class SpindleLoadData(Base):
     __tablename__ = 'spindle_load_data'

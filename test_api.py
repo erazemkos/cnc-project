@@ -9,6 +9,7 @@ client = TestClient(app)
 
 
 def test_upload_spindle_load_data():
+    """ Uploads some data to the post endpoint and then gets the same thing and compares """
     # Sample data for testing
     machine_number = "M01"
     process_number = "P01"
@@ -32,7 +33,6 @@ def test_upload_spindle_load_data():
     assert response.status_code == 200
     assert response.json() == {"message": "Data uploaded successfully"}
 
-    # Fetching the last uploaded data
     get_response = client.get(
         "/spindle_load_data/",
         params={"machine_number": machine_number, "process_number": process_number, "label": label}
@@ -43,8 +43,10 @@ def test_upload_spindle_load_data():
 
     data = get_response.json()
 
-    # Comparing the binary data
+    # Comparing the binary data of the last added data with the data that we inserted as a test
     returned_data = base64.b64decode(data[-1]['data'])
     assert returned_data == sample_data
 
-test_upload_spindle_load_data()
+
+if __name__ == "__main__":
+    test_upload_spindle_load_data()
