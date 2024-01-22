@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+pandas
+h5py
+numpy
+python-multipart
+requests
+pydantic
+matplotlib
+pyarrow
