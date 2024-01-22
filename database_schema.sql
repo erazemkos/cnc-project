@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS spindle_load_data (
     process_id INTEGER NOT NULL,
     label_id INTEGER NOT NULL,
     filename TEXT NOT NULL,
-    data BLOB, -- Assuming the .h5 data will be stored as a binary large object
+    data BLOB,
+    num_samples INT NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (machine_id) REFERENCES machines(id),
     FOREIGN KEY (process_id) REFERENCES processes(id),
@@ -36,20 +37,3 @@ CREATE TABLE IF NOT EXISTS spindle_load_data (
 CREATE INDEX IF NOT EXISTS idx_machine ON spindle_load_data (machine_id);
 CREATE INDEX IF NOT EXISTS idx_process ON spindle_load_data (process_id);
 CREATE INDEX IF NOT EXISTS idx_label ON spindle_load_data (label_id);
-
--- Optional: Create views for good and poor data for easier querying
-CREATE VIEW IF NOT EXISTS good_data AS
-SELECT sld.*, m.machine_number, p.process_number, l.label
-FROM spindle_load_data sld
-JOIN machines m ON sld.machine_id = m.id
-JOIN processes p ON sld.process_id = p.id
-JOIN labels l ON sld.label_id = l.id
-WHERE l.label = 'good';
-
-CREATE VIEW IF NOT EXISTS poor_data AS
-SELECT sld.*, m.machine_number, p.process_number, l.label
-FROM spindle_load_data sld
-JOIN machines m ON sld.machine_id = m.id
-JOIN processes p ON sld.process_id = p.id
-JOIN labels l ON sld.label_id = l.id
-WHERE l.label = 'bad';

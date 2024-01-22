@@ -13,27 +13,28 @@ def read_h5_file(file_path: str):
     """
     Reads an .h5 file and returns the data contained within.
     """
-    with h5py.File(file_path, 'r') as file:
-        data_key = list(file.keys())[0]
-        data = np.array(file[data_key])
-    return data
+    with h5py.File(file_path, 'r') as f:
+        vibration_data = f['vibration_data'][:]
+    return vibration_data.astype(np.float64)
 
 
 def process_and_store_data():
     """
     Processes the CNC machining data and stores it in the sqlite database.
     """
+
     for machine in get_directories(DATASET_PATH):
         for process in get_directories(os.path.join(DATASET_PATH, machine)):
             for label in get_directories(os.path.join(DATASET_PATH, machine, process)):
                 process_label_data(machine, process, label)
 
 
-def get_directories(path: str):
+def get_directories(path: str, limit: int = 2):
     """
-    Returns a list of directory names inside the given path
+    Returns a list of directory names inside the given path with an upper limit
     """
-    return [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+    dirs = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+    return dirs[:limit]
 
 
 def process_label_data(machine: str, process: str, label: str, extension: str = '.h5'):
@@ -45,11 +46,12 @@ def process_label_data(machine: str, process: str, label: str, extension: str = 
         if filename.endswith(extension):
             file_path = os.path.join(label_path, filename)
             data = read_h5_file(file_path)
+            num_samples = np.array(data.shape)[0]
             data_blob = data.tobytes()
-            store_data(machine, process, label, filename, data_blob)
+            store_data(machine, process, label, filename, data_blob, int(num_samples))
 
 
-def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes):
+def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes, num_samples: int):
     """
     Store the given data in the database
     """
@@ -60,8 +62,8 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
     insert_label = text("INSERT OR IGNORE INTO labels (label) VALUES (:label)")
     insert_spindle_load = text("""
         INSERT INTO spindle_load_data 
-        (machine_id, process_id, label_id, filename, data) 
-        VALUES (:machine_id, :process_id, :label_id, :filename, :data_blob)
+        (machine_id, process_id, label_id, filename, data, num_samples) 
+        VALUES (:machine_id, :process_id, :label_id, :filename, :data_blob, :num_samples)
     """)
 
     # Executing each insert and getting the lastrowid
@@ -75,7 +77,8 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
         "process_id": process_id,
         "label_id": label_id,
         "filename": filename,
-        "data_blob": data_blob
+        "data_blob": data_blob,
+        "num_samples": num_samples
     })
     conn.commit()
 
@@ -85,7 +88,7 @@ def main():
     Main function to process and store CNC machining data.
     """
     process_and_store_data()
-    print("Data preprocessing and storage complete.")
+    print("Database filled up.")
 
 
 if __name__ == "__main__":
