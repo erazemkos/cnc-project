@@ -2,26 +2,22 @@ import os
 import h5py
 import numpy as np
 from sqlalchemy import create_engine, text
-from constants import DATABASE_URL, DATASET_PATH
+from constants import DATABASE_URL, DATASET_PATH, DATABASE_UTILS_PATH
 
 # Create a database engine
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL.replace(DATABASE_UTILS_PATH + '/', ""))
 conn = engine.connect()
 
 
-def read_h5_file(file_path: str):
-    """
-    Reads an .h5 file and returns the data contained within.
-    """
+def read_h5_file(file_path: str) -> np.ndarray:
+    """ Reads an .h5 file and returns the data contained within as a numpy array with type float64 """
     with h5py.File(file_path, 'r') as f:
         vibration_data = f['vibration_data'][:]
     return vibration_data.astype(np.float64)
 
 
 def process_and_store_data():
-    """
-    Processes the CNC machining data and stores it in the sqlite database.
-    """
+    """ Processes the CNC machining data and stores it in the sqlite database. """
 
     for machine in get_directories(DATASET_PATH):
         for process in get_directories(os.path.join(DATASET_PATH, machine)):
@@ -30,17 +26,13 @@ def process_and_store_data():
 
 
 def get_directories(path: str, limit: int = 2):
-    """
-    Returns a list of directory names inside the given path with an upper limit
-    """
+    """ Returns a list of directory names inside the given path with an upper limit """
     dirs = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
     return dirs[:limit]
 
 
 def process_label_data(machine: str, process: str, label: str, extension: str = '.h5'):
-    """
-    Process and store data for a specific machine, process, and label
-    """
+    """ Process and store data for a specific machine, process, and label """
     label_path = os.path.join(DATASET_PATH, machine, process, label)
     for filename in os.listdir(label_path):
         if filename.endswith(extension):
@@ -52,9 +44,7 @@ def process_label_data(machine: str, process: str, label: str, extension: str = 
 
 
 def store_data(machine: str, process: str, label: str, filename: str, data_blob: bytes):
-    """
-    Store the given data in the database
-    """
+    """ Store the given data in the database """
     
     # Prepare the SQL commands as text
     insert_machine = text("INSERT OR IGNORE INTO machines (machine_name) VALUES (:machine)")
@@ -83,9 +73,7 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
 
 
 def main():
-    """
-    Main function to process and store CNC machining data.
-    """
+    """ Main function to process and store CNC machining data. """
     process_and_store_data()
     print("Database filled up.")
 

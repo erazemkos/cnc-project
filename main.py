@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from crud_operations import create_db_handler
+from database_utils.database_handler import create_db_handler
 
 app = FastAPI()
 db_handler = create_db_handler()

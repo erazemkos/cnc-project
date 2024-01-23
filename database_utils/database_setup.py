@@ -1,7 +1,8 @@
+import os
 import sqlite3
 from sqlite3 import Error
+
 from constants import DATABASE_NAME, DATABASE_SETUP_SCRIPT
-import os
 
 
 def execute_sql(conn, sql):
@@ -14,10 +15,13 @@ def execute_sql(conn, sql):
 
 
 def create_database():
-    """ Creates the database specified by the database_schema.sql script """
+    """ Deletes then creates the database specified by the database_schema.sql script """
     if not os.path.exists(DATABASE_SETUP_SCRIPT):
         print("Database script missing! Can't create the tables.")
         return
+
+    if os.path.exists(DATABASE_NAME):
+        os.remove(DATABASE_NAME)
 
     with open(DATABASE_SETUP_SCRIPT, 'r') as file:
         sql_script = file.read()

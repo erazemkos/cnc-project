@@ -8,9 +8,10 @@ To run:
    git clone https://github.com/boschresearch/CNC_Machining.git ./data
 ```
 
-2. Create a database using sqlite:
+2. Move to `database_utils` and create a database using sqlite:
 
 ```
+   cd database_utils
    python database_setup.py
 ```
 
@@ -20,9 +21,10 @@ To run:
    python populate_database.py
 ```
 
-4. Export two examples - one good, one bad:
+4. Go back to root and either export two examples as csv files - one good, one bad:
 
 ```
+   cd ..
    python data_export_for_visualization.py
 ```
 
