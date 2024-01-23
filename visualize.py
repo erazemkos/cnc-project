@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from crud_operations import create_db_handler
 
 
-def visualize_data(byte_data, machine_number, process_number):
+def visualize_data(byte_data, machine_name, process_name):
     """
     Visualizes the data using Matplotlib with subplots for the same machine-process pairs.
     """
@@ -18,7 +18,7 @@ def visualize_data(byte_data, machine_number, process_number):
         axes[i].plot(data_array[:5000, 0])
         axes[i].plot(data_array[:5000, 1])
         axes[i].plot(data_array[:5000, 2])
-        axes[i].set_title(f"Machine: {machine_number}, Process: {process_number}, Label: {label}")
+        axes[i].set_title(f"Machine: {machine_name}, Process: {process_name}, Label: {label}")
         axes[i].set_xlabel('Sample Number')
         axes[i].set_ylabel('Data Value')
 
@@ -26,14 +26,14 @@ def visualize_data(byte_data, machine_number, process_number):
     plt.show()
 
 
-def visualize_samples(db_handler, machine_number="M01", process_number="OP01"):
+def visualize_samples(db_handler, machine_name="M01", process_name="OP01"):
     """
     Fetches data for the same machine-process pairs with both 'good' and 'bad' labels and visualizes it.
     """
-    good_data = db_handler.get_spindle_load_data(machine_number=machine_number, process_number=process_number, label="good")[0]
-    bad_data = db_handler.get_spindle_load_data(machine_number=machine_number, process_number=process_number, label="bad")[0]
+    good_data = db_handler.get_spindle_load_data(machine_name=machine_name, process_name=process_name, label="good")[0]
+    bad_data = db_handler.get_spindle_load_data(machine_name=machine_name, process_name=process_name, label="bad")[0]
 
-    visualize_data([good_data, bad_data], machine_number, process_number)
+    visualize_data([good_data, bad_data], machine_name, process_name)
 
 
 if __name__ == "__main__":

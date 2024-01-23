@@ -14,7 +14,7 @@ def export_data_for_visualization():
     """
     # Query to select one 'good' and one 'bad' data row
     query = """
-    SELECT m.machine_number, p.process_number, l.label, sld.filename, sld.timestamp, sld.data
+    SELECT m.machine_name, p.process_name, l.label, sld.filename, sld.timestamp, sld.data
     FROM spindle_load_data sld
     JOIN machines m ON sld.machine_id = m.id
     JOIN processes p ON sld.process_id = p.id

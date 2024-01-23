@@ -57,8 +57,8 @@ def store_data(machine: str, process: str, label: str, filename: str, data_blob:
     """
     
     # Prepare the SQL commands as text
-    insert_machine = text("INSERT OR IGNORE INTO machines (machine_number) VALUES (:machine)")
-    insert_process = text("INSERT OR IGNORE INTO processes (process_number) VALUES (:process)")
+    insert_machine = text("INSERT OR IGNORE INTO machines (machine_name) VALUES (:machine)")
+    insert_process = text("INSERT OR IGNORE INTO processes (process_name) VALUES (:process)")
     insert_label = text("INSERT OR IGNORE INTO labels (label) VALUES (:label)")
     insert_spindle_load = text("""
         INSERT INTO spindle_load_data 

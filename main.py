@@ -4,9 +4,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
 
-import models
 from crud_operations import create_db_handler
 
 app = FastAPI()
@@ -15,8 +13,8 @@ db_handler = create_db_handler()
 
 class SpindleLoadData(BaseModel):
     """ Define a Pydantic model for request bodies """
-    machine_number: str
-    process_number: str
+    machine_name: str
+    process_name: str
     label: str
     filename: str
     data: str
@@ -28,8 +26,8 @@ async def upload_spindle_load_data(data: SpindleLoadData):
     API endpoint to upload spindle load data.
     """
     # Check if the machine, process, and label already exist in the database
-    machine_id = db_handler.get_or_create_machine(data.machine_number)
-    process_id = db_handler.get_or_create_process(data.process_number)
+    machine_id = db_handler.get_or_create_machine(data.machine_name)
+    process_id = db_handler.get_or_create_process(data.process_name)
     label_id = db_handler.get_or_create_label(data.label)
 
     # Decode the Base64 encoded data
@@ -48,14 +46,14 @@ async def upload_spindle_load_data(data: SpindleLoadData):
 
 
 @app.get("/spindle_load_data/")
-def get_spindle_load_data(machine_number: str, process_number: str, label: str):
+def get_spindle_load_data(machine_name: str, process_name: str, label: str):
     """
     API endpoint to retrieve spindle load data.
     """
     # Retrieve data from the database
     data = db_handler.get_spindle_load_data(
-        machine_number=machine_number,
-        process_number=process_number,
+        machine_name=machine_name,
+        process_name=process_name,
         label=label
     )
     if data:

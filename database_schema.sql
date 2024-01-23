@@ -3,13 +3,13 @@
 -- Create a table for storing machine information
 CREATE TABLE IF NOT EXISTS machines (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    machine_number TEXT NOT NULL
+    machine_name TEXT NOT NULL
 );
 
 -- Create a table for storing process information
 CREATE TABLE IF NOT EXISTS processes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    process_number TEXT NOT NULL
+    process_name TEXT NOT NULL
 );
 
 -- Create a table for storing labels (good or bad)

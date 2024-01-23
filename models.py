@@ -11,7 +11,7 @@ class Machine(Base):
     __tablename__ = 'machines'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    machine_number = Column(String, nullable=False)
+    machine_name = Column(String, nullable=False)
     spindle_load_data = relationship('SpindleLoadData', back_populates='machine')
 
 
@@ -19,7 +19,7 @@ class Process(Base):
     __tablename__ = 'processes'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    process_number = Column(String, nullable=False)
+    process_name = Column(String, nullable=False)
     spindle_load_data = relationship('SpindleLoadData', back_populates='process')
 
 

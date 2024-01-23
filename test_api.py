@@ -12,8 +12,8 @@ client = TestClient(app)
 def test_upload_spindle_load_data():
     """ Uploads some data to the post endpoint and then gets the same thing and compares """
     # Sample data for testing
-    machine_number = "M01"
-    process_number = "P01"
+    machine_name = "M01"
+    process_name = "P01"
     label = "good"
     filename = "test_data.h5"
 
@@ -23,8 +23,8 @@ def test_upload_spindle_load_data():
 
     # Payload for the test
     payload = {
-        "machine_number": machine_number,
-        "process_number": process_number,
+        "machine_name": machine_name,
+        "process_name": process_name,
         "label": label,
         "filename": filename,
         "data": encoded_data
@@ -37,7 +37,7 @@ def test_upload_spindle_load_data():
 
     get_response = client.get(
         "/spindle_load_data/",
-        params={"machine_number": machine_number, "process_number": process_number, "label": label}
+        params={"machine_name": machine_name, "process_name": process_name, "label": label}
     )
 
     # Check if the GET request was successful

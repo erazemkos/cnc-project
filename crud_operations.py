@@ -9,25 +9,25 @@ class DatabaseHandler:
     def __init__(self, session: Session):
         self._db = session
 
-    def _get_machine_by_number(self, machine_number: str) -> Optional[Machine]:
-        return self._db.query(Machine).filter(Machine.machine_number == machine_number).first()
+    def _get_machine_by_number(self, machine_name: str) -> Optional[Machine]:
+        return self._db.query(Machine).filter(Machine.machine_name == machine_name).first()
 
-    def get_or_create_machine(self, machine_number: str) -> int:
-        machine = self._get_machine_by_number(machine_number)
+    def get_or_create_machine(self, machine_name: str) -> int:
+        machine = self._get_machine_by_number(machine_name)
         if not machine:
-            machine = Machine(machine_number=machine_number)
+            machine = Machine(machine_name=machine_name)
             self._db.add(machine)
             self._db.commit()
             self._db.refresh(machine)
         return machine.id
 
-    def _get_process_by_number(self, process_number: str) -> Optional[Process]:
-        return self._db.query(Process).filter(Process.process_number == process_number).first()
+    def _get_process_by_number(self, process_name: str) -> Optional[Process]:
+        return self._db.query(Process).filter(Process.process_name == process_name).first()
 
-    def get_or_create_process(self, process_number: str) -> int:
-        process = self._get_process_by_number(process_number)
+    def get_or_create_process(self, process_name: str) -> int:
+        process = self._get_process_by_number(process_name)
         if not process:
-            process = Process(process_number=process_number)
+            process = Process(process_name=process_name)
             self._db.add(process)
             self._db.commit()
             self._db.refresh(process)
@@ -59,7 +59,7 @@ class DatabaseHandler:
         self._db.refresh(db_data)
         return db_data
 
-    def get_spindle_load_data(self, machine_number: str, process_number: str, label: str):
+    def get_spindle_load_data(self, machine_name: str, process_name: str, label: str):
         """
         Retrieve spindle load data from the database based on machine number, process number, and label.
         """
@@ -68,8 +68,8 @@ class DatabaseHandler:
             ).join(Process, SpindleLoadData.process_id == Process.id
             ).join(Label, SpindleLoadData.label_id == Label.id
             ).filter(
-                Machine.machine_number == machine_number,
-                Process.process_number == process_number,
+                Machine.machine_name == machine_name,
+                Process.process_name == process_name,
                 Label.label == label
             ).all()
 
