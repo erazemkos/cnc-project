@@ -1,8 +1,7 @@
 import base64
-import os
 
-from fastapi.testclient import TestClient
 import numpy as np
+from fastapi.testclient import TestClient
 
 from main import app
 
@@ -12,10 +11,10 @@ client = TestClient(app)
 def test_upload_spindle_load_data():
     """ Uploads some data to the post endpoint and then gets the same thing and compares """
     # Sample data for testing
-    machine_name = "M01"
-    process_name = "P01"
+    machine_name = "M0123"
+    process_name = "P0123"
     label = "good"
-    filename = "test_data.h5"
+    filename = "test_data123.h5"
 
     random_array = np.random.rand(100, 3).astype(dtype=np.float64)
     random_bytes = random_array.tobytes()

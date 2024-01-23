@@ -22,9 +22,7 @@ class SpindleLoadData(BaseModel):
 
 @app.post("/upload_spindle_load_data/")
 async def upload_spindle_load_data(data: SpindleLoadData):
-    """
-    API endpoint to upload spindle load data.
-    """
+    """ API endpoint to upload spindle load data. """
     # Check if the machine, process, and label already exist in the database
     machine_id = db_handler.get_or_create_machine(data.machine_name)
     process_id = db_handler.get_or_create_process(data.process_name)
@@ -47,9 +45,7 @@ async def upload_spindle_load_data(data: SpindleLoadData):
 
 @app.get("/spindle_load_data/")
 def get_spindle_load_data(machine_name: str, process_name: str, label: str):
-    """
-    API endpoint to retrieve spindle load data.
-    """
+    """ API endpoint to retrieve spindle load data. """
     # Retrieve data from the database
     data = db_handler.get_spindle_load_data(
         machine_name=machine_name,

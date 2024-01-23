@@ -1,11 +1,12 @@
+import os
 from abc import ABC, abstractmethod
 from typing import Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from .constants import DATABASE_URL
-from .models import Machine, Process, Label, SpindleLoadData, Base
+from constants import DATABASE_UTILS_PATH, SQLITE_PREFIX, DATABASE_NAME
+from models import Machine, Process, Label, SpindleLoadData, Base
 
 
 class IDatabaseHandler(ABC):
@@ -112,7 +113,13 @@ class DatabaseHandler(IDatabaseHandler):
 def create_db_handler(handler_type: str = "sql_alchemy") -> IDatabaseHandler:
     """ Factory method for creating ORM objects """
     if handler_type == "sql_alchemy":
-        engine = create_engine(DATABASE_URL)
+        # Determine where we are
+        if os.path.basename(os.getcwd()) == DATABASE_UTILS_PATH:
+            database_url = f"{SQLITE_PREFIX}./{DATABASE_NAME}"
+        else:
+            database_url = f"{SQLITE_PREFIX}./{DATABASE_UTILS_PATH}/{DATABASE_NAME}"
+
+        engine = create_engine(database_url)
         Base.metadata.create_all(bind=engine)
         return DatabaseHandler(Session(engine))
     else:
