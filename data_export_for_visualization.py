@@ -1,35 +1,27 @@
+import numpy as np
 import pandas as pd
-from sqlalchemy import create_engine
 
-# Define the database connection string
-DATABASE_URL = "sqlite:///./cnc_machining.db"
+from database_utils.database_handler import create_db_handler, IDatabaseHandler
 
-# Create a database engine
-engine = create_engine(DATABASE_URL)
 
-def export_data_for_visualization():
-    """
-    Exports one 'good' and one 'bad' spindle load data entry from the sqlite database into a CSV file
-    for visualization in PowerBI.
-    """
-    # Query to select one 'good' and one 'bad' data row
-    query = """
-    SELECT m.machine_name, p.process_name, l.label, sld.filename, sld.timestamp, sld.data
-    FROM spindle_load_data sld
-    JOIN machines m ON sld.machine_id = m.id
-    JOIN processes p ON sld.process_id = p.id
-    JOIN labels l ON sld.label_id = l.id
-    WHERE l.label IN ('good', 'bad')
-    GROUP BY l.label
-    """
+def array_to_csv(array: np.ndarray, filename: str, separator: str = ';'):
+    """ Saves a Nx3 dim array as a csv """
 
-    # Execute the query and fetch the data
-    df = pd.read_sql_query(query, engine)
+    df = pd.DataFrame(array, columns=['x', 'y', 'z'])   # I assume this is the correct order
+    df.to_csv(filename, index=False, sep=separator)     # Separator is very important and I believe specific to locale
 
-    # Export the data to a CSV file
-    df.to_csv('spindle_load_data_for_visualization.csv', index=False)
-    print("Data exported successfully to 'spindle_load_data_for_visualization.csv'")
+
+def export_data_for_visualization(db_handler: IDatabaseHandler, machine_name: str = "M01", process_name: str = "OP01"):
+    """ Fetches data for the same machine-process pairs with both 'good' and 'bad' labels and saves it as csv files. """
+    good_data = db_handler.get_spindle_load_data(machine_name=machine_name, process_name=process_name, label="good")[0]
+    bad_data = db_handler.get_spindle_load_data(machine_name=machine_name, process_name=process_name, label="bad")[0]
+
+    good_data_arr = np.frombuffer(good_data.data, dtype=np.float64)
+    bad_data_arr = np.frombuffer(bad_data.data, dtype=np.float64)
+
+    array_to_csv(good_data_arr.reshape(-1, 3), "good_data.csv")
+    array_to_csv(bad_data_arr.reshape(-1, 3), "bad_data.csv")
 
 
 if __name__ == "__main__":
-    export_data_for_visualization()
+    export_data_for_visualization(db_handler=create_db_handler())

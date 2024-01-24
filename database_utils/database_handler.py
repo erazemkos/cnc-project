@@ -5,8 +5,8 @@ from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from constants import DATABASE_UTILS_PATH, SQLITE_PREFIX, DATABASE_NAME
-from models import Machine, Process, Label, SpindleLoadData, Base
+from database_utils.constants import DATABASE_UTILS_PATH, SQLITE_PREFIX, DATABASE_NAME
+from database_utils.models import Machine, Process, Label, SpindleLoadData, Base
 
 
 class IDatabaseHandler(ABC):

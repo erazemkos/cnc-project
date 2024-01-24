@@ -3,8 +3,8 @@ import os
 import h5py
 import numpy as np
 
-from constants import DATASET_PATH
-from database_handler import create_db_handler, IDatabaseHandler
+from database_utils.constants import DATASET_PATH
+from database_utils.database_handler import create_db_handler, IDatabaseHandler
 
 
 def read_h5_file(file_path: str) -> np.ndarray:

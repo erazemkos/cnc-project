@@ -2,7 +2,7 @@ import os
 import sqlite3
 from sqlite3 import Error
 
-from constants import DATABASE_NAME, DATABASE_SETUP_SCRIPT
+from database_utils.constants import DATABASE_NAME, DATABASE_SETUP_SCRIPT
 
 
 def execute_sql(conn, sql):
