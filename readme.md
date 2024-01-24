@@ -63,3 +63,6 @@ So to post the json, you have to encode the data first.
 5. In a real project, test files would be in a separate folder. Also constants could be in a `common` folder or something like that.
 But this app is a bit too small for common objects I believe.
 
+6. I didn't use PowerBI for visualization as I didn't really find a need for it. I don't know if that was part of the test or just a suggestion,
+so I included the `data_export_for_visualization.py` script which exports two samples to csv files, which I believe can be used in PowerBI.
+
