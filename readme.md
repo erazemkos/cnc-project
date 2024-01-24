@@ -33,10 +33,11 @@ OR just visualize it with matplotlib (on a subplot using 4000 samples):
 ```
 
 5. Test API by writing an entry to a database using the `/upload_spindle_load_data/` endpoint and then querying it
-using the `/spindle_load_data/` and finally comparing the result with the entry that was intended to be written:
+using the `/spindle_load_data/` and finally comparing the result with the entry that was intended to be written. Pytest
+should automatically detect all test files. To run tests:
 
 ```
-    python test_api.py
+    pytest
 ```
 
 OR test manually using requests for example (app is running on `0.0.0.0` on port `8000`). Run main app with:
