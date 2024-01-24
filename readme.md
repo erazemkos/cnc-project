@@ -8,23 +8,21 @@ To run:
    git clone https://github.com/boschresearch/CNC_Machining.git ./data
 ```
 
-2. Move to `database_utils` and create a database using sqlite:
+2. Create a database using sqlite by running a script with the module as a context:
 
 ```
-   cd database_utils
-   python database_setup.py
+   python -m database_utils.database_setup
 ```
 
-3. Populate the database:
+3. Similar to populate the database:
 
 ```
-   python populate_database.py
+   python -m database_utils.populate_database
 ```
 
-4. Go back to root and either export two examples as csv files - one good, one bad:
+4. Export two examples as csv files - one good, one bad:
 
 ```
-   cd ..
    python data_export_for_visualization.py
 ```
 

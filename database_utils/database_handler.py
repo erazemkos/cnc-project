@@ -113,13 +113,7 @@ class DatabaseHandler(IDatabaseHandler):
 def create_db_handler(handler_type: str = "sql_alchemy") -> IDatabaseHandler:
     """ Factory method for creating ORM objects """
     if handler_type == "sql_alchemy":
-        # Determine where we are
-        if os.path.basename(os.getcwd()) == DATABASE_UTILS_PATH:
-            database_url = f"{SQLITE_PREFIX}./{DATABASE_NAME}"
-        else:
-            database_url = f"{SQLITE_PREFIX}./{DATABASE_UTILS_PATH}/{DATABASE_NAME}"
-
-        engine = create_engine(database_url)
+        engine = create_engine(f"{SQLITE_PREFIX}./{DATABASE_NAME}")
         Base.metadata.create_all(bind=engine)
         return DatabaseHandler(Session(engine))
     else:
