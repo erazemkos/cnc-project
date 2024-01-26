@@ -66,3 +66,6 @@ But this app is a bit too small for common objects I believe.
 6. I didn't use PowerBI for visualization as I didn't really find a need for it. I don't know if that was part of the test or just a suggestion,
 so I included the `data_export_for_visualization.py` script which exports two samples to csv files, which I believe can be used in PowerBI.
 For this use case I think matplotlib is more than enough though.
+
+7. In the real world, eventually I would also make use of feature branches, versioning (so we would have some documentation which version is released and where),
+and also automatic CI/CD pipelines which would typically test and compile (not needed for python code but cython does improve performance if needed and also provides security) merges to the master branch. 
