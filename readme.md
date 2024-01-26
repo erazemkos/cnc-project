@@ -54,7 +54,7 @@ I don't think this was documented.
 2. Docstrings are not PEP 257-compliant. I find that the type hints combined with clear names of parameters
 are sufficient for parameter description, however this is a recent style development. I can modify it.
 
-3. The database_handler.py is the only thing I deemed worthy of making dependancy injection for. The rest of the app is complex enough to
+3. The database_handler.py is the only thing I deemed worthy of making dependancy injection for. The rest of the app is not complex enough to
 make abstractions of. I believe premature abstraction is the same evil as premature optimization.
 
 4. Data is saved as binary data in the database but that is incompatible with json. This is why I use base64 encoding.
